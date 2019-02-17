@@ -166,6 +166,7 @@ Resources:
         collation_server: utf8_general_ci
   DBCluster:
     DeletionPolicy: Snapshot # default
+    UpdateReplacePolicy: Snapshot
     Type: 'AWS::RDS::DBCluster'
     Properties:
       BackupRetentionPeriod: !Ref DBBackupRetentionPeriod
@@ -205,7 +206,7 @@ Outputs:
   ModuleId:
     Value: 'rds-aurora-serverless'
   ModuleVersion:
-    Value: '1.0.0'
+    Value: '1.1.0'
   StackName:
     Value: !Ref 'AWS::StackName'
   Name:
