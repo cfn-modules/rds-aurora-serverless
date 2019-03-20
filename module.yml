@@ -67,6 +67,11 @@ Parameters:
     Type: String
     NoEcho: true
     Default: ''
+  DBMasterUserPasswordSecretModule:
+    Description: 'The secret module used to provide the master password'
+    Type: String
+    NoEcho: true
+    Default: ''
   SubDomainNameWithDot:
     Description: 'Name that is used to create the DNS entry with trailing dot, e.g. §{SubDomainNameWithDot}§{HostedZoneName}. Leave blank for naked (or apex and bare) domain. Requires HostedZoneModule parameter!'
     Type: String
@@ -112,6 +117,7 @@ Conditions:
   HasAlertingModule: !Not [!Equals [!Ref AlertingModule, '']]
   HasNotDBSnapshotIdentifier: !Equals [!Ref DBSnapshotIdentifier, '']
   HasDBSnapshotIdentifier: !Not [!Condition HasNotDBSnapshotIdentifier]
+  HasMasterPasswordSecretModule: !Not [!Equals [DBMasterUserPasswordSecretModule, '']]
 Resources:
   RecordSet:
     Condition: HasHostedZoneModule
@@ -178,10 +184,15 @@ Resources:
       EngineVersion: !FindInMap [EngineMap, !Ref Engine, EngineVersion]
       KmsKeyId: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', {'Fn::ImportValue': !Sub '${KmsKeyModule}-Arn'}]
       MasterUsername: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', !Ref DBMasterUsername]
-      MasterUserPassword: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', !Ref DBMasterUserPassword]
-      Port: !FindInMap [EngineMap, !Ref Engine, Port]
-      PreferredBackupWindow: !Ref PreferredBackupWindow
-      PreferredMaintenanceWindow: !Ref PreferredMaintenanceWindow
+      MasterUserPassword: !If 
+                            - HasDBSnapshotIdentifier
+                            - !Ref 'AWS::NoValue'
+                            - !If
+                              - HasMasterPasswordSecretModule
+                              - !Sub
+                                - '{{resolve:secretsmanager:${Key}}}'
+                                - { Key:  {'Fn::ImportValue': !Sub '${DBMasterUserPasswordSecretModule}-SecretArn'}}
+                              - !Ref DBMasterUserPassword
       ScalingConfiguration:
         AutoPause: !Ref AutoPause
         MaxCapacity: !Ref MaxCapacity
