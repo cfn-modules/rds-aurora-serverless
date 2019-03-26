@@ -38,6 +38,10 @@ Parameters:
     Description: 'Optional but recommended stack name of alerting module.'
     Type: String
     Default: ''
+  SecretModule:
+    Description: 'Optional but recommended stack name of secret module.'
+    Type: String
+    Default: ''
   Engine:
     Description: 'The name of the database engine that you want to use for this DB cluster.'
     Type: String
@@ -63,7 +67,7 @@ Parameters:
     Type: 'String'
     Default: master
   DBMasterUserPassword:
-    Description: 'The master password for the DB instance (ignored when DBSnapshotIdentifier is set, value used from snapshot).'
+    Description: 'The master password for the DB instance (ignored when DBSnapshotIdentifier is set, value used from snapshot; also ignored if SecretModule is set).'
     Type: String
     NoEcho: true
     Default: ''
@@ -110,6 +114,7 @@ Conditions:
   HasBastionModule: !Not [!Equals [!Ref BastionModule, '']]
   HasHostedZoneModule: !Not [!Equals [!Ref HostedZoneModule, '']]
   HasAlertingModule: !Not [!Equals [!Ref AlertingModule, '']]
+  HasSecretModule: !Not [!Equals [!Ref SecretModule, '']]
   HasNotDBSnapshotIdentifier: !Equals [!Ref DBSnapshotIdentifier, '']
   HasDBSnapshotIdentifier: !Not [!Condition HasNotDBSnapshotIdentifier]
 Resources:
@@ -178,7 +183,7 @@ Resources:
       EngineVersion: !FindInMap [EngineMap, !Ref Engine, EngineVersion]
       KmsKeyId: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', {'Fn::ImportValue': !Sub '${KmsKeyModule}-Arn'}]
       MasterUsername: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', !Ref DBMasterUsername]
-      MasterUserPassword: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', !Ref DBMasterUserPassword]
+      MasterUserPassword: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', !If [HasSecretModule, !Join ['', ['{{resolve:secretsmanager:', {'Fn::ImportValue': !Sub '${SecretModule}-Arn'}, '}}']], !Ref DBMasterUserPassword]]
       Port: !FindInMap [EngineMap, !Ref Engine, Port]
       PreferredBackupWindow: !Ref PreferredBackupWindow
       PreferredMaintenanceWindow: !Ref PreferredMaintenanceWindow
@@ -206,7 +211,7 @@ Outputs:
   ModuleId:
     Value: 'rds-aurora-serverless'
   ModuleVersion:
-    Value: '1.1.0'
+    Value: '1.2.0'
   StackName:
     Value: !Ref 'AWS::StackName'
   Name:
