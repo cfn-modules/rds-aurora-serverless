@@ -30,6 +30,7 @@ Resources:
         BastionModule: !GetAtt 'Bastion.Outputs.StackName' # optional
         HostedZoneModule: !GetAtt 'HostedZone.Outputs.StackName' # optional
         AlertingModule: !GetAtt 'Alerting.Outputs.StackName' # optional
+        SecretModule: !GetAtt 'Secret.Outputs.StackName' # optional
         Engine: 'aurora' # optional
         DBSnapshotIdentifier: '' # optional
         DBName: 'test' # required (ignored when DBSnapshotIdentifier is set)
@@ -102,6 +103,13 @@ Resources:
       <td></td>
     </tr>
     <tr>
+      <td>SecretModule</td>
+      <td>Stack name of <a href="https://www.npmjs.com/package/@cfn-modules/secret">secret module</a></td>
+      <td></td>
+      <td>no</td>
+      <td></td>
+    </tr>
+    <tr>
       <td>Engine</td>
       <td>The name of the database engine that you want to use for this DB cluster</td>
       <td>aurora</td>
@@ -131,7 +139,7 @@ Resources:
     </tr>
     <tr>
       <td>DBMasterUsername</td>
-      <td>The master user name for the DB instance (ignored when DBSnapshotIdentifier is set, value used from snapshot)</td>
+      <td>The master password for the DB instance (ignored when DBSnapshotIdentifier is set, value used from snapshot; also ignored if SecretModule is set).</td>
       <td>master</td>
       <td>no</td>
       <td></td>

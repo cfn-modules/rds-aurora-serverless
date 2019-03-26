@@ -1,6 +1,6 @@
 {
   "name": "@cfn-modules/rds-aurora-serverless",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "RDS Aurora Serverless cluster with secure firewall configuration, encryption, multi AZ, auto scaling, backup enabled, and alerting",
   "author": "Michael Wittig <michael@widdix.de>",
   "license": "Apache-2.0",

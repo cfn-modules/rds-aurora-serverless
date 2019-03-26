@@ -7,7 +7,8 @@
     "@cfn-modules/rds-aurora-serverless": "file:../",
     "@cfn-modules/kms-key": "1.1.0",
     "@cfn-modules/vpc": "1.1.0",
-    "@cfn-modules/client-sg": "1.0.0"
+    "@cfn-modules/client-sg": "1.0.0",
+    "@cfn-modules/secret": "1.0.0"
   },
   "scripts": {
     "test": "eslint . && ava -c 4 *.js"
