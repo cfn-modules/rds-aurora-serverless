@@ -139,14 +139,14 @@ Resources:
     </tr>
     <tr>
       <td>DBMasterUsername</td>
-      <td>The master password for the DB instance (ignored when DBSnapshotIdentifier is set, value used from snapshot; also ignored if SecretModule is set).</td>
+      <td>The master user name for the DB instance (ignored when DBSnapshotIdentifier is set, value used from snapshot)</td>
       <td>master</td>
       <td>no</td>
       <td></td>
     </tr>
     <tr>
       <td>DBMasterUserPassword</td>
-      <td>The master password for the DB instance (ignored when DBSnapshotIdentifier is set, value used from snapshot)</td>
+      <td>The master password for the DB instance (ignored when DBSnapshotIdentifier is set, value used from snapshot; also ignored if SecretModule is set)</td>
       <td></td>
       <td>depends</td>
       <td></td>
