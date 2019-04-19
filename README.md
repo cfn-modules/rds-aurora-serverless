@@ -33,10 +33,10 @@ Resources:
         SecretModule: !GetAtt 'Secret.Outputs.StackName' # optional
         Engine: 'aurora' # optional
         DBSnapshotIdentifier: '' # optional
-        DBName: 'test' # required (ignored when DBSnapshotIdentifier is set)
+        DBName: 'test' # required (ignored when DBSnapshotIdentifier is set, value used from snapshot)
         DBBackupRetentionPeriod: '30' # optional
         DBMasterUsername: 'master' # optional
-        DBMasterUserPassword: 'SuP3rS3curE' # required (ignored when DBSnapshotIdentifier is set)
+        DBMasterUserPassword: 'SuP3rS3curE' # required (ignored when DBSnapshotIdentifier is set, value used from snapshot; also ignored if SecretModule is set)
         SubDomainNameWithDot: '' # optional
         PreferredBackupWindow: '09:54-10:24' # optional
         PreferredMaintenanceWindow: 'sat:07:00-sat:07:30' # optional
