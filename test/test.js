@@ -1,7 +1,7 @@
 const test = require('ava');
 const cfntest = require('@cfn-modules/test');
 
-test('defaults', async t => {
+test.serial('defaults', async t => {
   const stackName = cfntest.stackName();
   try {
     t.log(await cfntest.createStack(`${__dirname}/defaults.yml`, stackName, {}));
@@ -12,7 +12,7 @@ test('defaults', async t => {
   }
 });
 
-test('with-secret', async t => {
+test.serial('with-secret', async t => {
   const stackName = cfntest.stackName();
   try {
     t.log(await cfntest.createStack(`${__dirname}/with-secret.yml`, stackName, {}));
