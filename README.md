@@ -160,14 +160,14 @@ Resources:
     </tr>
     <tr>
       <td>PreferredBackupWindow</td>
-      <td>The daily time range in UTC during which you want to create automated backups</td>
+      <td>IGNORED BECAUSE OF A BUG IN CLOUDFORMATION! VALUE WILL APPLY IN THE FUTURE! The daily time range in UTC during which you want to create automated backups</td>
       <td>09:54-10:24</td>
       <td>no</td>
       <td></td>
     </tr>
     <tr>
       <td>PreferredMaintenanceWindow</td>
-      <td>The weekly time range (in UTC) during which system maintenance can occur</td>
+      <td>IGNORED BECAUSE OF A BUG IN CLOUDFORMATION! VALUE WILL APPLY IN THE FUTURE! The weekly time range (in UTC) during which system maintenance can occur</td>
       <td>sat:07:00-sat:07:30</td>
       <td>no</td>
       <td></td>
