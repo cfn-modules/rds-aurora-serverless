@@ -31,7 +31,6 @@ Resources:
         HostedZoneModule: !GetAtt 'HostedZone.Outputs.StackName' # optional
         AlertingModule: !GetAtt 'Alerting.Outputs.StackName' # optional
         SecretModule: !GetAtt 'Secret.Outputs.StackName' # optional
-        Engine: 'aurora' # optional
         DBSnapshotIdentifier: '' # optional
         DBName: 'test' # required (ignored when DBSnapshotIdentifier is set, value used from snapshot)
         DBBackupRetentionPeriod: '30' # optional
@@ -44,6 +43,7 @@ Resources:
         SecondsUntilAutoPause: '300' # optional
         MaxCapacity: '2' # optional
         MinCapacity: '2' # optional
+        EngineVersion: '5.6.10a' # optional
       TemplateURL: './node_modules/@cfn-modules/rds-aurora-serverless/module.yml'
 ```
 
@@ -108,13 +108,6 @@ Resources:
       <td></td>
       <td>no</td>
       <td></td>
-    </tr>
-    <tr>
-      <td>Engine</td>
-      <td>The name of the database engine that you want to use for this DB cluster</td>
-      <td>aurora</td>
-      <td>no</td>
-      <td>[aurora]</td>
     </tr>
     <tr>
       <td>DBSnapshotIdentifier</td>
@@ -200,5 +193,11 @@ Resources:
       <td>no</td>
       <td>[1, 2, 4, 8, 16, 32, 64, 128, 256]</td>
     </tr>
+    <tr>
+      <td>EngineVersion</td>
+      <td>Aurora Serverless MySQL version</td>
+      <td>5.6.10a</td>
+      <td>no</td>
+      <td>['5.6.10a']</td>
   </tbody>
 </table>
