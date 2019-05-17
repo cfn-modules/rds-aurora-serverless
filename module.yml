@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 AWSTemplateFormatVersion: '2010-09-09'
-Description: 'cfn-modules: AWS RDS Aurora Serverless cluster'
+Description: 'cfn-modules: AWS RDS Aurora Serverless MySQL cluster'
 # cfn-modules:implements(ExposeName, ExposeDnsName)
 Parameters:
   VpcModule:
@@ -43,10 +43,9 @@ Parameters:
     Type: String
     Default: ''
   Engine:
-    Description: 'The name of the database engine that you want to use for this DB cluster.'
+    Description: 'DEPRECATED since v1, removed in v3, value is ignored!'
     Type: String
-    AllowedValues:
-    - aurora # MySQL 5.6-compatible Aurora
+    AllowedValues: [aurora]
     Default: aurora
   DBSnapshotIdentifier:
     Description: 'Optional identifier for the DB cluster snapshot from which you want to restore (leave blank to create an empty cluster).'
@@ -104,11 +103,14 @@ Parameters:
     Type: String
     AllowedValues: [1, 2, 4, 8, 16, 32, 64, 128, 256]
     Default: 2
+  EngineVersion:
+    Description: 'Aurora Serverless MySQL version.'
+    Type: String
+    Default: '5.6.10a'
+    AllowedValues: ['5.6.10a'] # aws rds describe-db-engine-versions --engine aurora --query 'DBEngineVersions[?contains(SupportedEngineModes,`serverless`)]'
 Mappings:
-  EngineMap:
-    aurora:
-      EngineVersion: '5.6.10a'
-      Port: 3306
+  EngineVersionMap:
+    '5.6.10a':
       ClusterParameterGroupFamily: 'aurora5.6'
 Conditions:
   HasBastionModule: !Not [!Equals [!Ref BastionModule, '']]
@@ -137,8 +139,8 @@ Resources:
       GroupDescription: !Ref 'AWS::StackName'
       SecurityGroupIngress:
       - IpProtocol: tcp
-        FromPort: !FindInMap [EngineMap, !Ref Engine, Port]
-        ToPort: !FindInMap [EngineMap, !Ref Engine, Port]
+        FromPort: 3306
+        ToPort: 3306
         SourceSecurityGroupId: {'Fn::ImportValue': !Sub '${ClientSgModule}-SecurityGroupId'}
       VpcId: {'Fn::ImportValue': !Sub '${VpcModule}-Id'}
   SecurityGroupInSshFromBastion:
@@ -147,8 +149,8 @@ Resources:
     Properties:
       GroupId: !Ref SecurityGroup
       IpProtocol: tcp
-      FromPort: !FindInMap [EngineMap, !Ref Engine, Port]
-      ToPort: !FindInMap [EngineMap, !Ref Engine, Port]
+      FromPort: 3306
+      ToPort: 3306
       SourceSecurityGroupId: {'Fn::ImportValue': !Sub '${BastionModule}-SecurityGroupId'}
   DBSubnetGroup:
     Type: 'AWS::RDS::DBSubnetGroup'
@@ -159,7 +161,7 @@ Resources:
     Type: 'AWS::RDS::DBClusterParameterGroup'
     Properties:
       Description: !Ref 'AWS::StackName'
-      Family: !FindInMap [EngineMap, !Ref Engine, ClusterParameterGroupFamily]
+      Family: !FindInMap [EngineVersionMap, !Ref EngineVersion, ClusterParameterGroupFamily]
       Parameters:
         character_set_client: utf8
         character_set_connection: utf8
@@ -178,13 +180,12 @@ Resources:
       DatabaseName: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', !Ref DBName]
       DBClusterParameterGroupName: !Ref DBClusterParameterGroup
       DBSubnetGroupName: !Ref DBSubnetGroup
-      Engine: !Ref Engine
+      Engine: aurora
       EngineMode: serverless
-      EngineVersion: !FindInMap [EngineMap, !Ref Engine, EngineVersion]
+      EngineVersion: !Ref EngineVersion
       KmsKeyId: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', {'Fn::ImportValue': !Sub '${KmsKeyModule}-Arn'}]
       MasterUsername: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', !Ref DBMasterUsername]
       MasterUserPassword: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', !If [HasSecretModule, !Join ['', ['{{resolve:secretsmanager:', {'Fn::ImportValue': !Sub '${SecretModule}-Arn'}, '}}']], !Ref DBMasterUserPassword]]
-      # Port: !FindInMap [EngineMap, !Ref Engine, Port] TODO re-enable as soon as CloudFormation bug ix fixed
       # PreferredBackupWindow: !Ref PreferredBackupWindow TODO re-enable as soon as CloudFormation bug ix fixed
       # PreferredMaintenanceWindow: !Ref PreferredMaintenanceWindow TODO re-enable as soon as CloudFormation bug ix fixed
       ScalingConfiguration:
@@ -211,7 +212,7 @@ Outputs:
   ModuleId:
     Value: 'rds-aurora-serverless'
   ModuleVersion:
-    Value: '1.3.1'
+    Value: '1.4.0'
   StackName:
     Value: !Ref 'AWS::StackName'
   Name:
