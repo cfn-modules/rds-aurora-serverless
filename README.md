@@ -47,6 +47,15 @@ Resources:
       TemplateURL: './node_modules/@cfn-modules/rds-aurora-serverless/module.yml'
 ```
 
+## Examples
+
+none
+
+## Related modules
+
+* [rds-mysql](https://github.com/cfn-modules/rds-mysql)
+* [rds-postgres](https://github.com/cfn-modules/rds-postgres)
+
 ## Parameters
 
 <table>
