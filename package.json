@@ -1,7 +1,7 @@
 {
   "name": "@cfn-modules/rds-aurora-serverless",
   "version": "1.4.0",
-  "description": "RDS Aurora Serverless cluster with secure firewall configuration, encryption, multi AZ, auto scaling, backup enabled, and alerting",
+  "description": "RDS Aurora Serverless MySQL cluster with secure firewall configuration, encryption, multi AZ, auto scaling, backup enabled, and alerting",
   "author": "Michael Wittig <michael@widdix.de>",
   "license": "Apache-2.0",
   "keywords": ["cfn-modules", "cfn-modules:ExposeName", "cfn-modules:ExposeDnsName"],
