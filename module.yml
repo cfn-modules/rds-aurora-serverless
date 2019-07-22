@@ -23,7 +23,7 @@ Parameters:
     Description: 'Stack name of client-sg module.'
     Type: String
   KmsKeyModule:
-    Description: 'Stack name of kms-key module (gnored when DBSnapshotIdentifier is set, value used from snapshot).'
+    Description: 'Stack name of kms-key module (ignored when DBSnapshotIdentifier is set, value used from snapshot).'
     Type: String
     Default: ''
   BastionModule:
@@ -212,7 +212,7 @@ Outputs:
   ModuleId:
     Value: 'rds-aurora-serverless'
   ModuleVersion:
-    Value: '1.4.0'
+    Value: '1.5.0'
   StackName:
     Value: !Ref 'AWS::StackName'
   Name:
@@ -223,3 +223,7 @@ Outputs:
     Value: !GetAtt 'DBCluster.Endpoint.Address'
     Export:
       Name: !Sub '${AWS::StackName}-DNSName'
+  ClusterName:
+    Value: !Ref DBCluster
+    Export:
+      Name: !Sub '${AWS::StackName}-ClusterName'
