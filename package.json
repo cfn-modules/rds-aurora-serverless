@@ -4,13 +4,17 @@
   "description": "RDS Aurora Serverless MySQL cluster with secure firewall configuration, encryption, multi AZ, auto scaling, backup enabled, and alerting",
   "author": "Michael Wittig <michael@widdix.de>",
   "license": "Apache-2.0",
-  "keywords": ["cfn-modules", "cfn-modules:ExposeName", "cfn-modules:ExposeDnsName"],
+  "keywords": [
+    "cfn-modules",
+    "cfn-modules:ExposeName",
+    "cfn-modules:ExposeDnsName"
+  ],
   "homepage": "https://github.com/cfn-modules",
   "bugs": {
     "url": "https://github.com/cfn-modules/rds-aurora-serverless/issues"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/cfn-modules/rds-aurora-serverless.git"
+    "type": "git",
+    "url": "https://github.com/cfn-modules/rds-aurora-serverless.git"
   }
 }
