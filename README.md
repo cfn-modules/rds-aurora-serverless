@@ -177,17 +177,17 @@ none
     </tr>
     <tr>
       <td>AutoPause</td>
+      <td>Enable automatic pause for a Serverless Aurora cluster. A cluster can be paused only when it has no connections. If a cluster is paused for more than seven days, the cluster might be backed up with a snapshot. In this case, the cluster is restored when there is a request to connect to it.</td>
+      <td>true</td>
+      <td>no</td>
+      <td>[true, false]</td>
+    </tr>
+    <tr>
+      <td>SecondsUntilAutoPause</td>
       <td>The time, in seconds, before a Serverless Aurora cluster is paused</td>
       <td>300</td>
       <td>no</td>
       <td>[1-86400]</td>
-    </tr>
-    <tr>
-      <td>SecondsUntilAutoPause</td>
-      <td>Stack name of lambda-function module to receive events from this S3 bucket. Also grants the Lambda function access to this bucket and this bucket access to the Lambda function.</td>
-      <td></td>
-      <td>no</td>
-      <td></td>
     </tr>
     <tr>
       <td>MaxCapacity</td>
