@@ -44,6 +44,7 @@ Resources:
         MaxCapacity: '2' # optional
         MinCapacity: '2' # optional
         EngineVersion: '5.6.10a' # optional
+        EnableDataApi: 'true' # optional
       TemplateURL: './node_modules/@cfn-modules/rds-aurora-serverless/module.yml'
 ```
 
@@ -209,5 +210,13 @@ none
       <td>5.6.10a</td>
       <td>no</td>
       <td>['5.6.10a']</td>
+    </tr>
+    <tr>
+      <td>EnableDataApi</td>
+      <td>Enable the [Data API](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html).</td>
+      <td>true</td>
+      <td>no</td>
+      <td>[true, false]</td>
+    </tr>
   </tbody>
 </table>
