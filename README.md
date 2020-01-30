@@ -45,7 +45,6 @@ Resources:
         MinCapacity: '2' # optional
         EngineVersion: '5.6.10a' # optional
         EnableDataApi: 'true' # optional
-        EnableIAMDatabaseAuthentication: 'true' # optional
       TemplateURL: './node_modules/@cfn-modules/rds-aurora-serverless/module.yml'
 ```
 
@@ -215,13 +214,6 @@ none
     <tr>
       <td>EnableDataApi</td>
       <td>Enable the [Data API](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html).</td>
-      <td>true</td>
-      <td>no</td>
-      <td>[true, false]</td>
-    </tr>
-    <tr>
-      <td>EnableIAMDatabaseAuthentication</td>
-      <td>Enable [mapping of AWS Identity and Access Management (IAM) accounts to database accounts](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/UsingWithRDS.IAMDBAuth.html).</td>
       <td>true</td>
       <td>no</td>
       <td>[true, false]</td>
