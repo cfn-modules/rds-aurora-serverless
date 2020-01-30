@@ -113,11 +113,6 @@ Parameters:
     Type: String
     AllowedValues: ['true', 'false']
     Default: 'true'
-  EnableIAMDatabaseAuthentication:
-    Description: 'Enable mapping of AWS Identity and Access Management (IAM) accounts to database accounts (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/UsingWithRDS.IAMDBAuth.html).'
-    Type: String
-    AllowedValues: ['true', 'false']
-    Default: 'true'
 Mappings:
   EngineVersionMap:
     '5.6.10a':
@@ -191,7 +186,6 @@ Resources:
       DBClusterParameterGroupName: !Ref DBClusterParameterGroup
       DBSubnetGroupName: !Ref DBSubnetGroup
       EnableHttpEndpoint: !Ref EnableDataApi
-      EnableIAMDatabaseAuthentication: !Ref EnableIAMDatabaseAuthentication
       Engine: aurora
       EngineMode: serverless
       EngineVersion: !Ref EngineVersion
