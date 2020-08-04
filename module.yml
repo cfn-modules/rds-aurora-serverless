@@ -136,7 +136,7 @@ Resources:
         HostedZoneName: {'Fn::ImportValue': !Sub '${HostedZoneModule}-Name'}
       ResourceRecords:
       - !GetAtt 'DBCluster.Endpoint.Address'
-      TTL: '60'
+      TTL: 60
       Type: CNAME
   SecurityGroup:
     Type: 'AWS::EC2::SecurityGroup'
