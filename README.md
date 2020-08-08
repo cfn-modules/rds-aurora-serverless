@@ -1,6 +1,3 @@
-[![Build Status](https://travis-ci.org/cfn-modules/rds-aurora-serverless.svg?branch=master)](https://travis-ci.org/cfn-modules/rds-aurora-serverless)
-[![NPM version](https://img.shields.io/npm/v/@cfn-modules/rds-aurora-serverless.svg)](https://www.npmjs.com/package/@cfn-modules/rds-aurora-serverless)
-
 # cfn-modules: AWS RDS Aurora Serverless MySQL cluster
 
 RDS Aurora Serverless MySQL cluster with secure firewall configuration, [encryption](https://www.npmjs.com/package/@cfn-modules/kms-key), multi AZ, auto scaling, backup enabled, and [alerting](https://www.npmjs.com/package/@cfn-modules/alerting).
