@@ -1,0 +1,34 @@
+---
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'cfn-modules test'
+Resources:
+  Vpc:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      Parameters:
+        S3Endpoint: 'false' # speed up the test
+        DynamoDBEndpoint: 'false' # speed up the test
+        FlowLog: 'false' # speed up the test
+        NatGateways: 'false' # speed up the test
+      TemplateURL: './node_modules/@cfn-modules/vpc/module.yml'
+  ClientSg:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      Parameters:
+        VpcModule: !GetAtt 'Vpc.Outputs.StackName'
+      TemplateURL: './node_modules/@cfn-modules/client-sg/module.yml'
+  Key:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      TemplateURL: './node_modules/@cfn-modules/kms-key/module.yml'
+  AuroraServerlessCluster:
+    Type: 'AWS::CloudFormation::Stack'
+    Properties:
+      Parameters:
+        VpcModule: !GetAtt 'Vpc.Outputs.StackName'
+        ClientSgModule: !GetAtt 'ClientSg.Outputs.StackName'
+        KmsKeyModule: !GetAtt 'Key.Outputs.StackName'
+        EngineVersion: '5.7.mysql-aurora.2.07.1'
+        DBName: 'test'
+        DBMasterUserPassword: 'SuP3rS3curE'
+      TemplateURL: './node_modules/@cfn-modules/rds-aurora-serverless/module.yml'
