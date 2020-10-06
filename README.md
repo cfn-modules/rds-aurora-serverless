@@ -206,7 +206,7 @@ none
       <td>Aurora Serverless MySQL version</td>
       <td>5.6.10a</td>
       <td>no</td>
-      <td>['5.6.10a']</td>
+      <td>['5.6.10a', '5.7.mysql-aurora.2.04.9', '5.7.mysql-aurora.2.07.1']</td>
     </tr>
     <tr>
       <td>EnableDataApi</td>
