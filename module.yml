@@ -75,22 +75,17 @@ Parameters:
     Type: String
     Default: 'aurora.'
   PreferredBackupWindow:
-    Description: 'IGNORED BECAUSE OF A BUG IN CLOUDFORMATION! VALUE WILL APPLY IN THE FUTURE! The daily time range in UTC during which you want to create automated backups.' # TODO remove uppercase warning
+    Description: 'The daily time range in UTC during which you want to create automated backups.'
     Type: String
     Default: '09:54-10:24'
   PreferredMaintenanceWindow:
-    Description: IGNORED BECAUSE OF A BUG IN CLOUDFORMATION! VALUE WILL APPLY IN THE FUTURE! The weekly time range (in UTC) during which system maintenance can occur. # TODO remove uppercase warning
+    Description: 'The weekly time range (in UTC) during which system maintenance can occur.'
     Type: String
     Default: 'sat:07:00-sat:07:30'
-  AutoPause:
-    Description: 'Enable automatic pause for a Serverless Aurora cluster. A cluster can be paused only when it has no connections. If a cluster is paused for more than seven days, the cluster might be backed up with a snapshot. In this case, the cluster is restored when there is a request to connect to it.'
-    Type: String
-    AllowedValues: ['true', 'false']
-    Default: 'true'
   SecondsUntilAutoPause:
-    Description: 'The time, in seconds, before a Serverless Aurora cluster is paused.'
+    Description: 'IGNORED BECAUSE OF A BUG IN CLOUDFORMATION! VALUE WILL APPLY IN THE FUTURE! The time, in seconds, before a Serverless Aurora cluster is paused.'  # TODO remove uppercase warning
     Type: Number
-    MinValue: 1
+    MinValue: 300
     MaxValue: 86400
     Default: 300
   MaxCapacity:
@@ -106,8 +101,8 @@ Parameters:
   EngineVersion:
     Description: 'Aurora Serverless MySQL version.'
     Type: String
-    Default: '5.6.10a'
-    AllowedValues: ['5.6.10a', '5.7.mysql-aurora.2.07.1'] # aws rds describe-db-engine-versions --engine aurora --query 'DBEngineVersions[?contains(SupportedEngineModes,`serverless`)]'; aws rds describe-db-engine-versions --engine aurora-mysql --query 'DBEngineVersions[?contains(SupportedEngineModes,`serverless`)]'
+    Default: '8.0.mysql-aurora.3.08.0'
+    AllowedValues: ['8.0.mysql-aurora.3.08.0'] # aws rds describe-orderable-db-instance-options --engine aurora-mysql --db-instance-class db.serverless --query 'OrderableDBInstanceOptions[].[EngineVersion]' --output text
   EnableDataApi:
     Description: 'Enable the Data API (https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/data-api.html).'
     Type: String
@@ -115,13 +110,9 @@ Parameters:
     Default: 'true'
 Mappings:
   EngineVersionMap:
-    '5.6.10a':
-      ClusterParameterGroupFamily: 'aurora5.6'
-      EngineVersion: '5.6.10a'
-      Engine: aurora
-    '5.7.mysql-aurora.2.07.1':
-      ClusterParameterGroupFamily: 'aurora-mysql5.7'
-      EngineVersion: '5.7.mysql_aurora.2.07.1'
+    '8.0.mysql-aurora.3.08.0':
+      ClusterParameterGroupFamily: 'aurora-mysql8.0'
+      EngineVersion: '8.0.mysql_aurora.3.08.0'
       Engine: 'aurora-mysql'
 Conditions:
   HasBastionModule: !Not [!Equals [!Ref BastionModule, '']]
@@ -193,22 +184,26 @@ Resources:
       DBSubnetGroupName: !Ref DBSubnetGroup
       EnableHttpEndpoint: !Ref EnableDataApi
       Engine: !FindInMap [EngineVersionMap, !Ref EngineVersion, Engine]
-      EngineMode: serverless
       EngineVersion: !FindInMap [EngineVersionMap, !Ref EngineVersion, EngineVersion]
       KmsKeyId: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', {'Fn::ImportValue': !Sub '${KmsKeyModule}-Arn'}]
       MasterUsername: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', !Ref DBMasterUsername]
       MasterUserPassword: !If [HasDBSnapshotIdentifier, !Ref 'AWS::NoValue', !If [HasSecretModule, !Join ['', ['{{resolve:secretsmanager:', {'Fn::ImportValue': !Sub '${SecretModule}-Arn'}, '}}']], !Ref DBMasterUserPassword]]
-      # PreferredBackupWindow: !Ref PreferredBackupWindow TODO re-enable as soon as CloudFormation bug ix fixed
-      # PreferredMaintenanceWindow: !Ref PreferredMaintenanceWindow TODO re-enable as soon as CloudFormation bug ix fixed
-      ScalingConfiguration:
-        AutoPause: !Ref AutoPause
+      PreferredBackupWindow: !Ref PreferredBackupWindow
+      PreferredMaintenanceWindow: !Ref PreferredMaintenanceWindow
+      ServerlessV2ScalingConfiguration:
         MaxCapacity: !Ref MaxCapacity
         MinCapacity: !Ref MinCapacity
-        SecondsUntilAutoPause: !Ref SecondsUntilAutoPause
+        # SecondsUntilAutoPause: !Ref SecondsUntilAutoPause TODO Waiting for CloudFormation support
       SnapshotIdentifier: !If [HasDBSnapshotIdentifier, !Ref DBSnapshotIdentifier, !Ref 'AWS::NoValue']
       StorageEncrypted: true
       VpcSecurityGroupIds:
       - !Ref SecurityGroup
+  ServerlessDBInstance:
+    Type: 'AWS::RDS::DBInstance'
+    Properties:
+      DBClusterIdentifier: !Ref DBCluster
+      DBInstanceClass: 'db.serverless'
+      Engine: !FindInMap [EngineVersionMap, !Ref EngineVersion, Engine]
   DBClusterEventSubscription:
     Condition: HasAlertingModule
     Type: 'AWS::RDS::EventSubscription'
@@ -224,7 +219,7 @@ Outputs:
   ModuleId:
     Value: 'rds-aurora-serverless'
   ModuleVersion:
-    Value: '1.6.0'
+    Value: '2.0.0'
   StackName:
     Value: !Ref 'AWS::StackName'
   Name:
