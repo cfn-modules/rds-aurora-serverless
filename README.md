@@ -49,6 +49,12 @@ Resources:
 
 none
 
+## Migration
+
+### v1 to v2
+
+* Be warned, switching from `1.x.x` to `2.x.x` will replace the database cluster. AWS is sunsetting Aurora Serverless v1. To upgrade to version 2, we recommend to take a snapshot of your current database cluster and use the `DBSnapshotIdentifier` to create a new Aurora cluster with serverless v2.
+
 ## Related modules
 
 * [rds-aurora-serverless-postgres](https://github.com/cfn-modules/rds-aurora-serverless-postgres)
