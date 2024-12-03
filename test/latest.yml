@@ -28,7 +28,7 @@ Resources:
         VpcModule: !GetAtt 'Vpc.Outputs.StackName'
         ClientSgModule: !GetAtt 'ClientSg.Outputs.StackName'
         KmsKeyModule: !GetAtt 'Key.Outputs.StackName'
-        EngineVersion: '5.7.mysql-aurora.2.07.1'
+        EngineVersion: '8.0.mysql-aurora.3.08.0'
         DBName: 'test'
         DBMasterUserPassword: 'SuP3rS3curE'
       TemplateURL: './node_modules/@cfn-modules/rds-aurora-serverless/module.yml'
