@@ -2,7 +2,7 @@
   "private": true,
   "dependencies": {
     "eslint": "7.6.0",
-    "ava": "3.11.1",
+    "ava": "6.2.0",
     "@cfn-modules/test": "0.7.3",
     "@cfn-modules/rds-aurora-serverless": "file:../",
     "@cfn-modules/kms-key": "1.2.1",
